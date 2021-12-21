@@ -15,7 +15,7 @@ data class Parking(val vehicles: MutableSet<Vehicle>) {
                     println("Welcome to AlkeParking!")
                     true
                 }else{
-                     println("Sorry, the check-in failed")
+                     println("Sorry, the check-in failed because the vehicle is already in the parking")
                     false
                 }
             }
