@@ -26,4 +26,21 @@ data class Parking(val vehicles: MutableSet<Vehicle>) {
             }
         }
     }
+
+    fun containVehicle(plate: String): Vehicle?{
+        for (vehicle in vehicles){
+            if (vehicle.plate == plate){
+                return vehicle
+            }
+        }
+        return null
+    }
+
+    fun removeVehicle(vehicle: Vehicle): Boolean{
+        if(vehicles.contains(vehicle)){
+            vehicles.remove(vehicle)
+            return true
+        }
+        return false
+    }
 }

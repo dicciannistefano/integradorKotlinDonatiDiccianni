@@ -36,4 +36,10 @@ fun main() {
     println("------ADD-----")
     //for loop to add all the vehicles in the array
     createdVehicles.forEach {parking.addVehicle(it)}
+
+    val parkingSpace = ParkingSpace(createdVehicles[0],parking)
+    val cal: Calendar = Calendar.getInstance()
+    cal.add(Calendar.MINUTE, 136)
+    parkingSpace.actualTime = cal
+    parkingSpace.checkOutVehicle("ABC123")
 }
