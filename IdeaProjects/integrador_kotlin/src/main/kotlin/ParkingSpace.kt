@@ -13,12 +13,13 @@ data class ParkingSpace(var vehicle : Vehicle, val parking: Parking) {
     val parkedTime: Long get() = (actualTime.timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
 
-    //EXERCISE 7
+    //EXERCISE 7:
     fun checkOutVehicle(plate: String){
         checkOutVehicle(plate, ::onSuccess, ::onError)
     }
 
     private fun checkOutVehicle(plate: String, success:(Int) -> Unit, error:() -> Unit){
+        //todo --> evaluating if the vehicle is in their parking space
         if(vehicle.plate == plate){
             var hasDiscountCard = false
             vehicle.discountCard?.let {
@@ -31,15 +32,20 @@ data class ParkingSpace(var vehicle : Vehicle, val parking: Parking) {
     }
 
     private fun onSuccess(amount: Int){
-        parking.removeVehicle(vehicle)
-        println("Your fee is $$amount . Come back soon.")
+        parking.apply {
+            removeVehicle(vehicle)
+            editParkingData(amount)
+            //showParkingData()
+        }
+        //EXERCISE 10:
+        println("Vehicle with plate ${vehicle.plate}, your fee is $$amount . Come back soon.")
     }
 
     private fun onError(){
-        println("Sorry, the checkout failed")
+        println("Sorry, the checkout failed, incorrect plate")
     }
 
-    //EXERCISE 8
+    //EXERCISE 8:
     private fun calculateFee(type: VehicleType, parkedTime: Int, hasDiscountCard: Boolean): Int{
         var timeInMinutes = parkedTime % 60
         val timeInHours = parkedTime / 60
