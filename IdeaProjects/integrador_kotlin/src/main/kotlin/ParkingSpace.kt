@@ -12,28 +12,35 @@ data class ParkingSpace(var vehicle : Vehicle, val parking: Parking) {
     //EXERCISE 4: parkedTime value
     val parkedTime: Long get() = (actualTime.timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
+
+    //EXERCISE 7
     fun checkOutVehicle(plate: String){
         checkOutVehicle(plate, ::onSuccess, ::onError)
     }
 
     private fun checkOutVehicle(plate: String, success:(Int) -> Unit, error:() -> Unit){
         if(vehicle.plate == plate){
-            success(calculateFee(vehicle.type, parkedTime.toInt()))
+            var hasDiscountCard = false
+            vehicle.discountCard?.let {
+                hasDiscountCard = true
+            }
+            success(calculateFee(vehicle.type, parkedTime.toInt(), hasDiscountCard))
         }else{
             error()
         }
     }
 
-    fun onSuccess(amount: Int): Unit{
+    private fun onSuccess(amount: Int){
         parking.removeVehicle(vehicle)
-        println("Vehicle ${vehicle.plate} pay a fee of $amount")
+        println("Your fee is $$amount . Come back soon.")
     }
 
-    fun onError(): Unit{
-        println("Vehicle doesn't exist")
+    private fun onError(){
+        println("Sorry, the checkout failed")
     }
 
-    private fun calculateFee(type: VehicleType, parkedTime: Int): Int{
+    //EXERCISE 8
+    private fun calculateFee(type: VehicleType, parkedTime: Int, hasDiscountCard: Boolean): Int{
         var timeInMinutes = parkedTime % 60
         val timeInHours = parkedTime / 60
 
@@ -47,6 +54,12 @@ data class ParkingSpace(var vehicle : Vehicle, val parking: Parking) {
             result = type.fee +  ((timeInMinutes / MINUTES_AFTER_VEHICLE_TYPE_FEE) * FEE_AFTER_VEHICLE_TYPE_FEE)
         }else if(timeInHours < 2){
             result = type.fee
+        }
+
+        //EXERCISE 9: Apply discount
+        if(hasDiscountCard){
+            val appliedResult = result - (result * 0.15)
+            result = appliedResult.toInt()
         }
         return result
     }

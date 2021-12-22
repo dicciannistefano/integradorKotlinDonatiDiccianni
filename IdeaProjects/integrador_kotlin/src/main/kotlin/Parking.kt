@@ -19,7 +19,6 @@ data class Parking(val vehicles: MutableSet<Vehicle>) {
                     false
                 }
             }
-
             else -> {
                 println("Sorry, the check-in failed")
                 false
@@ -27,7 +26,7 @@ data class Parking(val vehicles: MutableSet<Vehicle>) {
         }
     }
 
-    fun containVehicle(plate: String): Vehicle?{
+    fun containsVehicle(plate: String): Vehicle?{
         for (vehicle in vehicles){
             if (vehicle.plate == plate){
                 return vehicle
